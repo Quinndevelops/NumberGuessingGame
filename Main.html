@@ -25,6 +25,19 @@
             background-color: #6F7073;    
             color: #fff;
         }
+        select {
+            padding: 5px;
+            border: 1px solid #1c1c1d;
+            border-radius: 10px;
+            box-sizing: border-box;
+            font-size: 16px;
+            margin: 3px;
+            height: auto;
+            width: auto;
+            background-color: #1c1c1d;    
+            color: #fff;
+}
+
         .try { 
             background-color: #3478F5;
             border-radius: 10px;
@@ -39,11 +52,13 @@
             text-align: center;
             color: #fff;
         }
+
         .message {
             color: #fff;
             font-size: 16px;
             margin-top: 10px;
         }
+
         .high-score {
             color: #fff;
             font-size: 18px;
@@ -53,7 +68,17 @@
 </head>
 <body>
     <h1>Higher or Lower Number Guessing Game</h1>
-    <p>Try to guess the correct number between 1 and 1000.</p>
+    
+    <!-- Add the dropdown menu for game mode selection -->
+    <select id="gameMode" onchange="startNewGame()">
+        <option value="1000">Guess 1 to 1000</option>
+        <option value="10000">Guess 1 to 10,000</option>
+        <option value="100000">Guess 1 to 100,000</option>
+        <option value="500000">Guess 1 to 500,000</option>
+        <option value="1000000">Guess 1 to 1,000,000</option>
+        <option value="1000000000">Guess 1 to 1,000,000,000</option>
+    </select>
+    <br>
     
     <input type="number" inputmode="numeric" id="guess" placeholder="Enter your guess">
     <br>
@@ -63,18 +88,21 @@
     <p id="highScore" class="high-score"></p>
 
     <script>
-        let targetNumber, attempts, highScore;
+        let targetNumber, attempts, highScore, maxNumber;
 
         function startNewGame() {
-            targetNumber = Math.floor(Math.random() * 1000) + 1;
+            // Get the selected game mode value from the dropdown
+            maxNumber = parseInt(document.getElementById('gameMode').value);
+            
+            targetNumber = Math.floor(Math.random() * maxNumber) + 1;
             attempts = 0;
         }
 
         function checkGuess() {
             const userGuess = parseInt(document.getElementById('guess').value);
 
-            if (isNaN(userGuess) || userGuess < 1 || userGuess > 1000) {
-                document.getElementById('message').innerHTML = 'Please enter a valid number between 1 and 1000.';
+            if (isNaN(userGuess) || userGuess < 1 || userGuess > maxNumber) {
+                document.getElementById('message').innerHTML = `Please enter a valid number between 1 and ${maxNumber}.`;
                 return;
             }
 
