@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Number Guessing Game</title>
     <style>
-        body {
+       body {
             background-color: #1C1C1D;
             color: #fff;
             font-family: sans-serif;
@@ -69,7 +69,6 @@
 <body>
     <h1>Higher or Lower Number Guessing Game</h1>
     
-    <!-- Add the dropdown menu for game mode selection -->
     <select id="gameMode" onchange="startNewGame()">
         <option value="1000">Guess 1 to 1000</option>
         <option value="10000">Guess 1 to 10,000</option>
@@ -88,14 +87,17 @@
     <p id="highScore" class="high-score"></p>
 
     <script>
-        let targetNumber, attempts, highScore, maxNumber;
+        let targetNumber, attempts, highScores = {};
+        let maxNumber;
 
         function startNewGame() {
-            // Get the selected game mode value from the dropdown
             maxNumber = parseInt(document.getElementById('gameMode').value);
             
             targetNumber = Math.floor(Math.random() * maxNumber) + 1;
             attempts = 0;
+
+            highScore = highScores[maxNumber] || undefined;
+            updateHighScoreDisplay();
         }
 
         function checkGuess() {
@@ -112,8 +114,9 @@
                 document.getElementById('message').innerHTML = `Congratulations! You guessed the correct number in ${attempts} attempts.`;
                 
                 if (attempts < highScore || highScore === undefined) {
+                    highScores[maxNumber] = attempts;
                     highScore = attempts;
-                    document.getElementById('highScore').innerHTML = `High Score: ${highScore} attempts!`;
+                    updateHighScoreDisplay();
                 }
 
                 startNewGame();
@@ -127,6 +130,10 @@
             } else {
                 document.getElementById('message').insertAdjacentHTML('afterbegin', 'Try a lower number.<br>');
             }
+        }
+
+        function updateHighScoreDisplay() {
+            document.getElementById('highScore').innerHTML = `High Score (${maxNumber}): ${highScore || 'N/A'} attempts!`;
         }
 
         // Initialize the game
